@@ -1,14 +1,29 @@
 package com.example.jaehyung.seniorproject;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+    Button conbtn;
+    private BluetoothService btService = null;
+
+    private final Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg){
+            super.handleMessage(msg);
+        }
+    };
 
     int BackButtonCounter =0;
     @Override
@@ -16,6 +31,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         BackButtonCounter =0;
         setContentView(R.layout.activity_main);
+        conbtn=(Button)findViewById(R.id.conbtn);
+        conbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"hello",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
