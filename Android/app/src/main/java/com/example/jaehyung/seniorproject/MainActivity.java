@@ -1,6 +1,7 @@
 package com.example.jaehyung.seniorproject;
 
 import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,14 +17,6 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     Button conbtn;
-    private BluetoothService btService = null;
-
-    private final Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg){
-            super.handleMessage(msg);
-        }
-    };
 
     int BackButtonCounter =0;
     @Override
