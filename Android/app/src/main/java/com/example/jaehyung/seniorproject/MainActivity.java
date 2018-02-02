@@ -4,10 +4,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,8 +21,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -32,11 +39,16 @@ public class MainActivity extends AppCompatActivity{
     int mPariedDeviceCount= 0;
     Set<BluetoothDevice> mDevices;
     BluetoothAdapter mBluetoothAdapter;
-    Button conbtn;
     BluetoothDevice mRemoteDevie;
     BluetoothSocket mSocket= null;
     OutputStream mOutputStream= null;
     InputStream mInputStream = null;
+
+    Button conbtn,mTest;
+    TextView mConnetDiv;
+    EditText mEdit;
+
+    String mTmp;
     String mStrDlimiter = "\n";
     String rcvData, sndData;
     char mCharDelimiter =  '\n';
@@ -53,13 +65,21 @@ public class MainActivity extends AppCompatActivity{
         BackButtonCounter =0;
         setContentView(R.layout.activity_main);
         conbtn=(Button)findViewById(R.id.conbtn);
+        mConnetDiv=(TextView)findViewById(R.id.connectdiv);
+        mEdit=(EditText)findViewById(R.id.SendTxt);
+        mTest=(Button)findViewById(R.id.test);
         conbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getApplicationContext(),"hello",Toast.LENGTH_LONG).show();
-                sendData(sndData);
-                sndData="";
                 checkBluetooth();
+            }
+        });
+        mTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendData(mEdit.getText().toString());
+                mEdit.setText("");
             }
         });
     }
@@ -67,7 +87,7 @@ public class MainActivity extends AppCompatActivity{
     void sendData(String msg){
         msg+=mStrDlimiter;
         try{
-
+            mOutputStream.write(msg.getBytes());
         }catch (Exception e){
             Toast.makeText(getApplicationContext(),"데이터 전송중 오류 발생",Toast.LENGTH_SHORT).show();
         }
@@ -97,8 +117,11 @@ public class MainActivity extends AppCompatActivity{
                  */
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             }
-            else // 블루투스 지원하며 활성 상태인 경우.
+            else {// 블루투스 지원하며 활성 상태인 경우.
+                //mBluetoothAdapter.startDiscovery();
                 selectDevice();
+            }
+
         }
     }
     @Override
@@ -138,6 +161,7 @@ public class MainActivity extends AppCompatActivity{
         Toast.makeText(this,"한번 더 뒤로가기를 누르시면 종료됩니다.",Toast.LENGTH_SHORT).show();
         BackButtonCounter++;
     }
+
     void selectDevice() {
         // 블루투스 디바이스는 연결해서 사용하기 전에 먼저 페어링 되어야만 한다
         // getBondedDevices() : 페어링된 장치 목록 얻어오는 함수.
@@ -159,7 +183,6 @@ public class MainActivity extends AppCompatActivity{
         }
         listItems.add("취소");  // 취소 항목 추가.
 
-
         // CharSequence : 변경 가능한 문자열.
         // toArray : List형태로 넘어온것 배열로 바꿔서 처리하기 위한 toArray() 함수.
         final CharSequence[] items = listItems.toArray(new CharSequence[listItems.size()]);
@@ -167,7 +190,6 @@ public class MainActivity extends AppCompatActivity{
         listItems.toArray(new CharSequence[listItems.size()]);
 
         builder.setItems(items, new DialogInterface.OnClickListener() {
-
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 // TODO Auto-generated method stub
@@ -176,11 +198,10 @@ public class MainActivity extends AppCompatActivity{
                 }
                 else { // 연결할 장치를 선택한 경우, 선택한 장치와 연결을 시도함.
                     connectToSelectedDevice(items[item].toString());
+                    mTmp=items[item].toString();
                 }
             }
-
         });
-
         builder.setCancelable(false);  // 뒤로 가기 버튼 사용 금지.
         AlertDialog alert = builder.create();
         alert.show();
@@ -198,6 +219,7 @@ public class MainActivity extends AppCompatActivity{
             // 이 메소드가 성공하면 스마트폰과 페어링 된 디바이스간 통신 채널에 대응하는 BluetoothSocket 오브젝트를 리턴함.
             mSocket = mRemoteDevie.createRfcommSocketToServiceRecord(uuid);
             mSocket.connect(); // 소켓이 생성 되면 connect() 함수를 호출함으로써 두기기의 연결은 완료된다.
+            mConnetDiv.setText(mRemoteDevie.getName());
 
             // 데이터 송수신을 위한 스트림 얻기.
             // BluetoothSocket 오브젝트는 두개의 Stream을 제공한다.
@@ -208,6 +230,8 @@ public class MainActivity extends AppCompatActivity{
 
             // 데이터 수신 준비.
             beginListenForData();
+
+            Toast.makeText(getApplicationContext(),"연결 완료",Toast.LENGTH_SHORT).show();
 
         }catch(Exception e) { // 블루투스 연결 중 오류 발생
             Toast.makeText(getApplicationContext(), "블루투스 연결 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
@@ -255,7 +279,6 @@ public class MainActivity extends AppCompatActivity{
                                             rcvData = rcvData + data + mStrDlimiter;
                                                     //mEditReceive.setText(mEditReceive.getText().toString() + data+ mStrDelimiter);
                                         }
-
                                     });
                                 }
                                 else {
@@ -263,13 +286,11 @@ public class MainActivity extends AppCompatActivity{
                                 }
                             }
                         }
-
                     } catch (Exception e) {    // 데이터 수신 중 오류 발생.
                         Toast.makeText(getApplicationContext(), "데이터 수신 중 오류가 발생 했습니다.", Toast.LENGTH_LONG).show();
                     }
                 }
             }
-
         });
     }
 

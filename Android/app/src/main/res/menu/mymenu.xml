@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/secure"
-        android:title="보안" />
+        android:id="@+id/main"
+        android:title="메인 메뉴" />
     <item
         android:id="@+id/auto"
         android:title="자동모드" />
@@ -13,6 +13,6 @@
         android:id="@+id/voice"
         android:title="음성인식 모드" />
     <item
-        android:id="@+id/main"
-        android:title="메인 메뉴" />
+        android:id="@+id/secure"
+        android:title="보안" />
 </menu>
