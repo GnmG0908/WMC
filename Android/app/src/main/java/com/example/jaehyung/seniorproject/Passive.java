@@ -6,12 +6,17 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 /**
  * Created by Jaehyung on 2017-12-28.
@@ -20,18 +25,97 @@ import android.widget.LinearLayout;
 public class Passive extends AppCompatActivity implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor mGroscope;
-    private Sensor accSensor;
+    Button left, right, up, slt, stop;
     Myview myview;
+
+    int select = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.passive);
         LinearLayout Layout = (LinearLayout) findViewById(R.id.Myview);
+
+        //버튼 선언부
+        left = (Button) findViewById(R.id.left);
+        up = (Button) findViewById(R.id.up);
+        right = (Button) findViewById(R.id.right);
+        stop = (Button) findViewById(R.id.stop);
+        slt = (Button) findViewById(R.id.slt);
+
+        //카메라뷰 선언부
         myview = new Myview(this);
         Layout.addView(myview);
+
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mGroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+
+        right.setEnabled(false);
+        left.setEnabled(false);
+        up.setEnabled(false);
+
+        left.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (select % 2 == 1) {
+                    if(myview.gyroX>0)
+                        myview.gyroX = 0;
+                    myview.gyroX -= 30;
+                    myview.invalidate();
+                }
+                return false;
+            }
+        });
+        right.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (select % 2 == 1) {
+                    if(myview.gyroX<0)
+                        myview.gyroX =0;
+                    myview.gyroX += 30;
+                    myview.invalidate();
+                }
+                return false;
+            }
+        });
+        up.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (select % 2 == 1) {
+                    myview.gyroY += 15;
+                    myview.invalidate();
+                }
+                return false;
+            }
+        });
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myview.gyroX = 0;
+                myview.gyroY=0;
+                myview.invalidate();
+            }
+        });
+        slt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                select++;
+                myview.gyroX = 0;
+                myview.gyroY = 0;
+                myview.gyroZ = 0;
+                if(select%2==1)
+                {
+                    right.setEnabled(true);
+                    left.setEnabled(true);
+                    up.setEnabled(true);
+                }
+                else {
+                    right.setEnabled(false);
+                    left.setEnabled(false);
+                    up.setEnabled(false);
+                }
+            }
+        });
     }
 
     @Override
@@ -84,8 +168,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor;
-
-        if (sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+        if (sensor.getType() == Sensor.TYPE_GYROSCOPE && select % 2 == 0) {
             myview.gyroX += Math.round(event.values[0] * 100);
             myview.gyroY += Math.round(event.values[1] * 100);
             myview.gyroZ += Math.round(event.values[2] * 100);

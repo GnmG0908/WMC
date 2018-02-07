@@ -52,14 +52,14 @@ public class Myview extends View {
         paint.setStrokeWidth((float) (Math.abs(gyroY) * 3.0));
         canvas.drawLine(100, 250, 200, 400, paint);
         canvas.drawText("Y축" + gyroY, 100, 250, paint);*/
-        canvas.drawCircle(900+xPos,300-yPos,30,paint);
+        canvas.drawCircle(600+xPos,300-yPos,30,paint);
         if(gyroY!=0||(gyroZ+gyroX)!=0){
             //xPos+=(gyroX-gyroZ);
             xPos+=gyroX/100;
-            if (xPos<-900)
-                xPos=-900;
-            if (xPos>900)
-                xPos=900;
+            if (xPos<-600)
+                xPos=-600;
+            if (xPos>600)
+                xPos=600;
             yPos+=gyroY/100;
             if(yPos<-300)
                 yPos=-300;

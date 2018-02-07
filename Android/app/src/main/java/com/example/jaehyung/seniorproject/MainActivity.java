@@ -1,20 +1,13 @@
 package com.example.jaehyung.seniorproject;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +18,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -45,12 +37,12 @@ public class MainActivity extends AppCompatActivity{
     InputStream mInputStream = null;
 
     Button conbtn,mTest;
-    TextView mConnetDiv;
+    TextView mConnetDiv, mRev;
     EditText mEdit;
 
     String mTmp;
     String mStrDlimiter = "\n";
-    String rcvData, sndData;
+    String rcvData;
     char mCharDelimiter =  '\n';
 
     Thread mWorkerThread = null;
@@ -68,6 +60,7 @@ public class MainActivity extends AppCompatActivity{
         mConnetDiv=(TextView)findViewById(R.id.connectdiv);
         mEdit=(EditText)findViewById(R.id.SendTxt);
         mTest=(Button)findViewById(R.id.test);
+        mRev=(TextView)findViewById(R.id.RevTxt);
         conbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,6 +77,7 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
+    //블루투스 부분
     void sendData(String msg){
         msg+=mStrDlimiter;
         try{
@@ -123,43 +117,6 @@ public class MainActivity extends AppCompatActivity{
             }
 
         }
-    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.mymenu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.auto:
-                startActivity(new Intent(MainActivity.this,Auto.class));
-                break;
-            case R.id.passive:
-                startActivity(new Intent(MainActivity.this,Passive.class));
-                break;
-            case R.id.secure:
-                startActivity(new Intent(MainActivity.this,Secure.class));
-                break;
-            case R.id.voice:
-                startActivity(new Intent(MainActivity.this,Voice.class));
-                break;
-            case R.id.main:
-                break;
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (BackButtonCounter ==1)
-            finish();
-        Toast.makeText(this,"한번 더 뒤로가기를 누르시면 종료됩니다.",Toast.LENGTH_SHORT).show();
-        BackButtonCounter++;
     }
 
     void selectDevice() {
@@ -276,7 +233,9 @@ public class MainActivity extends AppCompatActivity{
                                         @Override
                                         public void run() {
                                             // mStrDelimiter = '\n';
+
                                             rcvData = rcvData + data + mStrDlimiter;
+                                            mRev.setText(rcvData);
                                                     //mEditReceive.setText(mEditReceive.getText().toString() + data+ mStrDelimiter);
                                         }
                                     });
@@ -307,5 +266,44 @@ public class MainActivity extends AppCompatActivity{
             }
         }
         return selectedDevice;
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.mymenu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.auto:
+                startActivity(new Intent(MainActivity.this,Auto.class));
+                break;
+            case R.id.passive:
+                startActivity(new Intent(MainActivity.this,Passive.class));
+                break;
+            case R.id.secure:
+                startActivity(new Intent(MainActivity.this,Secure.class));
+                break;
+            case R.id.voice:
+                startActivity(new Intent(MainActivity.this,Voice.class));
+                break;
+            case R.id.main:
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (BackButtonCounter ==1)
+            finish();
+        Toast.makeText(this,"한번 더 뒤로가기를 누르시면 종료됩니다.",Toast.LENGTH_SHORT).show();
+        BackButtonCounter++;
     }
 }
