@@ -1,10 +1,12 @@
 package com.example.jaehyung.seniorproject;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -15,6 +17,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -25,7 +28,8 @@ import android.widget.Toast;
 public class Passive extends AppCompatActivity implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor mGroscope;
-    Button left, right, up, slt, stop;
+    ImageButton left, right, up, stop;
+    Button slt;
     Myview myview;
 
     int select = 0;
@@ -36,11 +40,16 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         setContentView(R.layout.passive);
         LinearLayout Layout = (LinearLayout) findViewById(R.id.Myview);
 
+        getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.custom_passive);
+        getSupportActionBar().setElevation(5);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
         //버튼 선언부
-        left = (Button) findViewById(R.id.left);
-        up = (Button) findViewById(R.id.up);
-        right = (Button) findViewById(R.id.right);
-        stop = (Button) findViewById(R.id.stop);
+        left = (ImageButton) findViewById(R.id.left);
+        up = (ImageButton) findViewById(R.id.up);
+        right = (ImageButton) findViewById(R.id.right);
+        stop = (ImageButton) findViewById(R.id.stop);
         slt = (Button) findViewById(R.id.slt);
 
         //카메라뷰 선언부

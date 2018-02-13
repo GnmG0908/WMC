@@ -4,12 +4,21 @@
     android:id="@+id/AutoXml"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     android:orientation="vertical">
 
+    <ImageButton
+        android:id="@+id/onoff"
+        android:layout_width="wrap_content"
+        android:layout_height="420dp"
+        android:layout_gravity="center"
+        android:background="#FFFFFF"
+        android:src="@drawable/red_start" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="자동모드 입니다."
-        android:textSize="20pt"
+        android:id="@+id/ment"
+        android:text="자율주행을 시작할 경우 전원버튼을 눌러주세요."
+        android:textSize="5pt"
         android:gravity="center"/>
 </LinearLayout>

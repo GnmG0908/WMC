@@ -1,22 +1,29 @@
 package com.example.jaehyung.seniorproject;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -37,7 +44,7 @@ public class MainActivity extends AppCompatActivity{
     InputStream mInputStream = null;
 
     Button conbtn,mTest;
-    TextView mConnetDiv, mRev;
+    TextView mConnetDiv, mRev, Title;
     EditText mEdit;
 
     String mTmp;
@@ -51,12 +58,22 @@ public class MainActivity extends AppCompatActivity{
 
     int BackButtonCounter =0;   // 뒤로가기 키 제어
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         BackButtonCounter =0;
+
+        //액션바 부분
+        getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.custom_title);
+        getSupportActionBar().setElevation(5);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
         setContentView(R.layout.activity_main);
         conbtn=(Button)findViewById(R.id.conbtn);
+        Title=(TextView)findViewById(R.id.mytitle);
+        Title.setText("연결 설정");
         mConnetDiv=(TextView)findViewById(R.id.connectdiv);
         mEdit=(EditText)findViewById(R.id.SendTxt);
         mTest=(Button)findViewById(R.id.test);
