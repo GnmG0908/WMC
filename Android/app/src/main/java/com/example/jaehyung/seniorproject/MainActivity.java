@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity{
 
         setContentView(R.layout.activity_main);
         conbtn=(Button)findViewById(R.id.conbtn);
-        Title=(TextView)findViewById(R.id.mytitle);
-        Title.setText("연결 설정");
+        //Title=(TextView)findViewById(R.id.mytitle);
+        //Title.setText("연결 설정");
         mConnetDiv=(TextView)findViewById(R.id.connectdiv);
         mEdit=(EditText)findViewById(R.id.SendTxt);
         mTest=(Button)findViewById(R.id.test);
