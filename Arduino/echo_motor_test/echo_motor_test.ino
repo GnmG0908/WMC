@@ -1,11 +1,14 @@
-#define dir2 8
-#define pwm2 9
-#define trigPin 13
-#define echoPin 12
+#define dir1 8
+#define dir2 10
+#define pwm1 9
+#define pwm2 11
+#define trigPin 12
+#define echoPin 13
 int pwm_value;
 long duration, distance;
 
 void setup() {
+  pinMode(pwm1, OUTPUT);
   pinMode(pwm2, OUTPUT);
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
@@ -13,8 +16,8 @@ void setup() {
 }
 
 void loop() {
-  digitalWrite(dir2, HIGH);
-  //analogWrite(pwm2, 200);
+  //digitalWrite(dir1, HIGH);
+  //digitalWrite(dir2, HIGH);
 
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
@@ -24,14 +27,18 @@ void loop() {
   duration = pulseIn(echoPin, HIGH);
   distance = (duration/2) / 29.1;
 
-  if(distance >= 200 || distance <= 10){
-    Serial.println("거리를 측정할 수 없음");
+  if(distance <= 150){
+    Serial.println("정지");
+    analogWrite(pwm1, 0);
     analogWrite(pwm2, 0);
   }
   else{
     Serial.print(distance);
     Serial.println(" cm");
+    digitalWrite(dir1, LOW);
+    digitalWrite(dir2, HIGH);
+    analogWrite(pwm1, 255);
     analogWrite(pwm2, 255);
   }
-  delay(500);
+  delay(400);
 }
