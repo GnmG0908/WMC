@@ -3,6 +3,7 @@
     <blacklists>
       <blacklist language="Java">
         <added pattern="org.altbeacon.beacon.Region.Region(uniqueId,id1,id2,id3)" />
+        <added pattern="com.estimote.coresdk.observation.region.beacon.BeaconRegion.BeaconRegion(identifier,proximityUUID,major,minor)" />
       </blacklist>
     </blacklists>
   </component>
