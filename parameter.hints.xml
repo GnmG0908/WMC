@@ -1,0 +1,9 @@
+<application>
+  <component name="ParameterNameHintsSettings">
+    <blacklists>
+      <blacklist language="Java">
+        <added pattern="org.altbeacon.beacon.Region.Region(uniqueId,id1,id2,id3)" />
+      </blacklist>
+    </blacklists>
+  </component>
+</application>
