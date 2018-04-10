@@ -2,6 +2,17 @@
 
 #define SLAVE 1
 
+void receiveFromMaster(int bytes) {
+  for (int i = 0 ; i < bytes ; i++) {
+    char c = Wire.read();
+    Serial.print(c);
+  }
+}
+
+void sendToMaster() {
+  Wire.write("SLAVE -> MASTER");
+}
+
 void setup() {
   Wire.begin(SLAVE);
   Wire.onReceive(receiveFromMaster);
@@ -10,17 +21,5 @@ void setup() {
 }
 
 void loop () {
-}
-
-void receiveFromMaster(int bytes) {
-  for (int i = 0 ; i < bytes ; i++) {
-    char c = Wire.read();
-    Serial.print(c);
-  }
-  Serial.println();
-}
-
-void sendToMaster() {
-  Wire.write("SLAVE -> MASTER");
 }
 
