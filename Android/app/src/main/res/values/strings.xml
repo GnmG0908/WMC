@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CARY</string>
+    <string name="app_name">CARY_DEMO</string>
     <string name="MainActivity">연결 설정</string>
     <string name="Auto">자율 주행</string>
     <string name="Passive">수동 주행</string>

@@ -136,20 +136,16 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()!=R.id.passive)
+            finish();
         switch (item.getItemId()) {
             case R.id.auto:
                 startActivity(new Intent(Passive.this, Auto.class));
                 break;
             case R.id.passive:
                 break;
-            case R.id.secure:
-                startActivity(new Intent(Passive.this, Secure.class));
-                break;
-            case R.id.voice:
-                startActivity(new Intent(Passive.this, Voice.class));
-                break;
             case R.id.main:
-                startActivity(new Intent(Passive.this, MainActivity.class));
+                //startActivity(new Intent(Passive.this, MainActivity.class));
                 break;
             default:
                 break;

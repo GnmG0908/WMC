@@ -21,4 +21,32 @@
         android:text="자율주행을 시작할 경우 전원버튼을 눌러주세요."
         android:textSize="5pt"
         android:gravity="center"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/caryF"
+        android:text="CaryF:"
+        android:textSize="5pt"
+        android:gravity="center"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/caryR"
+        android:text="CaryR:"
+        android:textSize="5pt"
+        android:gravity="center"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/caryL"
+        android:text="CaryL:"
+        android:textSize="5pt"
+        android:gravity="center"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/testname"
+        android:text="Name:"
+        android:textSize="5pt"
+        android:gravity="center"/>
 </LinearLayout>

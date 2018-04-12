@@ -9,10 +9,4 @@
     <item
         android:id="@+id/passive"
         android:title="수동모드" />
-    <item
-        android:id="@+id/voice"
-        android:title="음성인식 모드" />
-    <item
-        android:id="@+id/secure"
-        android:title="보안" />
 </menu>

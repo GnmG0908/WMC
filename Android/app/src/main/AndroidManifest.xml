@@ -16,20 +16,16 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="메인 화면"></activity>
+            android:label="메인 화면"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".Auto"
-            android:label="자동 모드"></activity>
+            android:label="자동 모드"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".Passive"
             android:label="수동 모드"
             android:screenOrientation="landscape"></activity>
-        <activity
-            android:name=".Secure"
-            android:label="@string/app_name"></activity>
-        <activity
-            android:name=".Voice"
-            android:label="@string/app_name"></activity>
 
 
         <activity
