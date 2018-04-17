@@ -28,6 +28,7 @@ import android.widget.Toast;
 public class Passive extends AppCompatActivity implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor mGroscope;
+    Bluetooth bt;
     ImageButton left, right, up, stop;
     Button slt;
     Myview myview;
@@ -52,6 +53,11 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         stop = (ImageButton) findViewById(R.id.stop);
         slt = (Button) findViewById(R.id.slt);
 
+        //intent
+        Intent intent = getIntent();
+        bt.mTmp = intent.getStringExtra("CARY");
+        bt.connectToSelectedDevice(bt.mTmp);
+        bt.connectToSelectedDevice(bt.mTmp);
         //카메라뷰 선언부
         myview = new Myview(this);
         Layout.addView(myview);
@@ -71,6 +77,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                         myview.gyroX = 0;
                     myview.gyroX -= 30;
                     myview.invalidate();
+                    bt.sendData("L");
                 }
                 return false;
             }
@@ -83,6 +90,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                         myview.gyroX =0;
                     myview.gyroX += 30;
                     myview.invalidate();
+                    bt.sendData("R");
                 }
                 return false;
             }
@@ -93,6 +101,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                 if (select % 2 == 1) {
                     myview.gyroY += 15;
                     myview.invalidate();
+                    bt.sendData("F");
                 }
                 return false;
             }
@@ -103,6 +112,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                 myview.gyroX = 0;
                 myview.gyroY=0;
                 myview.invalidate();
+                bt.sendData("stop");
             }
         });
         slt.setOnClickListener(new View.OnClickListener() {
