@@ -49,4 +49,11 @@
         android:text="Name:"
         android:textSize="5pt"
         android:gravity="center"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/direction"
+        android:text="Name:"
+        android:textSize="5pt"
+        android:gravity="center"/>
 </LinearLayout>
