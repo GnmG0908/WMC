@@ -39,6 +39,11 @@ public class Cary_algorithm {
                 max = "R";
             }
         }
+
+        if(left==front||front==right||left==right){
+            max="F";
+        }
+
         return max;
 
     }
