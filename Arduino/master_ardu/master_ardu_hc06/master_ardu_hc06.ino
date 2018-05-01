@@ -1,11 +1,10 @@
 #include <Wire.h>
 #include <SoftwareSerial.h>
-
+// 마스터
 #define SLAVE 1
-
+// 블루투스
 #define RXD 5 //아두이노에서는 6
 #define TXD 6 //아두이노에서는 5
-
 SoftwareSerial bluetooth(RXD, TXD);
 
 String readSerial(){
