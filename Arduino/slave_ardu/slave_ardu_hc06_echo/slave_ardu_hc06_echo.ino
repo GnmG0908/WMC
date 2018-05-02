@@ -151,7 +151,7 @@ void go(){
     digitalWrite(dir2, HIGH);
     analogWrite(pwm1, 255);
     analogWrite(pwm2, 255);
-    //delay(200); 
+    delay(450); 
   }
   else {
     stopm();
@@ -170,7 +170,8 @@ void left(){
     digitalWrite(dir2, HIGH);
     analogWrite(pwm1, 0);
     analogWrite(pwm2, 255);
-    //delay(200); 
+    delay(200);
+    go();
   }
   else{
     stopm();
@@ -189,12 +190,18 @@ void right(){
     digitalWrite(dir2, HIGH);
     analogWrite(pwm1, 255);
     analogWrite(pwm2, 0);
-    //delay(200); 
+    delay(200);
+    go(); 
   }
   else{
     stopm();
   }
 }
+/*
+// 제자리 반회전
+void turn(){
+}
+*/
 // 정지
 void stopm(){
   //bool LU = echoLU();
