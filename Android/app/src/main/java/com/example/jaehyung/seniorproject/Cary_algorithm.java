@@ -61,7 +61,7 @@ public class Cary_algorithm {
 
     public String value_refine(double left, double front, double right) {
         String max = "";
-        double std = 3;//기준값에서 위아래로 3 차이나는것은 튀는 값임
+        double std = 5;//기준값에서 위아래로 3 차이나는것은 튀는 값임
         int flag = 0;//튄값이 몇개인지 count하는 flag
 
 

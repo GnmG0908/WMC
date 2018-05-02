@@ -28,7 +28,7 @@ import android.widget.Toast;
 public class Passive extends AppCompatActivity implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor mGroscope;
-    Bluetooth bt;
+    Bluetooth bt = new Bluetooth();
     ImageButton left, right, up, stop;
     Button slt;
     Myview myview;
@@ -39,6 +39,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.passive);
+        Intent intent = getIntent();
         LinearLayout Layout = (LinearLayout) findViewById(R.id.Myview);
 
         getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -54,8 +55,8 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         slt = (Button) findViewById(R.id.slt);
 
         //intent
-        Intent intent = getIntent();
         bt.mTmp = intent.getStringExtra("CARY");
+
         bt.connectToSelectedDevice(bt.mTmp);
         bt.connectToSelectedDevice(bt.mTmp);
         //카메라뷰 선언부
@@ -146,11 +147,14 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         if (item.getItemId()!=R.id.passive)
             finish();
         switch (item.getItemId()) {
             case R.id.auto:
-                startActivity(new Intent(Passive.this, Auto.class));
+                intent = new Intent(this, Auto.class);
+                intent.putExtra("CARY", bt.mTmp);
+                startActivity(intent);
                 break;
             case R.id.passive:
                 break;

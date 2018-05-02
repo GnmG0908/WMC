@@ -35,22 +35,22 @@ public class Auto extends AppCompatActivity implements BeaconConsumer {
     String test;
 
     //알고리즘 부
-    Cary_algorithm cary_algorithm=null;
+    Cary_algorithm cary_algorithm = null;
 
     //FLAG
     boolean flag = false;
-    boolean cnt_flag=false;
+    boolean cnt_flag = false;
 
     //비콘 부분
     private BeaconManager beaconManager;
     BeaconRegion region;
 
     //비콘 값 정제
-    int frontRssi=0, rightRssi=0, leftRssi=0;
+    int frontRssi = 0, rightRssi = 0, leftRssi = 0;
 
     ImageButton btn;
     TextView ment;
-    TextView caryR, caryL, caryF, testname,direction;
+    TextView caryR, caryL, caryF, testname, direction;
     boolean mode = false;
 
     @Override
@@ -79,7 +79,7 @@ public class Auto extends AppCompatActivity implements BeaconConsumer {
         caryL = (TextView) findViewById(R.id.caryL);
         caryR = (TextView) findViewById(R.id.caryR);
         testname = (TextView) findViewById(R.id.testname);
-        direction =(TextView) findViewById(R.id.direction);
+        direction = (TextView) findViewById(R.id.direction);
         bt.connectToSelectedDevice(bt.mTmp);
         bt.connectToSelectedDevice(bt.mTmp);
 
@@ -116,30 +116,34 @@ public class Auto extends AppCompatActivity implements BeaconConsumer {
                     if (caryf != null && caryl != null && caryr != null) {
                         flag = true;
 
-                        if(cnt_flag==false){
-                            cary_algorithm= new Cary_algorithm(leftRssi, frontRssi, rightRssi );
-                            cnt_flag=true;
+                        if (cnt_flag == false) {
+                            cary_algorithm = new Cary_algorithm(leftRssi, frontRssi, rightRssi);
+                            cnt_flag = true;
                         }
-                        bt.sendData(cary_algorithm.value_refine(leftRssi, frontRssi, rightRssi ));
-                        direction.setText(cary_algorithm.value_refine(leftRssi, frontRssi, rightRssi ));
-
-
-/*
                         //블루투스 송신 알고리즘
                         //정면 강할시
-                        if(mode==true) {
-                            if (frontRssi > rightRssi && frontRssi > leftRssi) {
-                                    bt.sendData("F");
-                                }
-                                //왼쪽 강할시
-                                if (rightRssi > frontRssi && leftRssi > rightRssi) {
-                                    bt.sendData("L");
-                                }
-                                //오른쪽 강할시
-                                if (leftRssi > frontRssi && rightRssi > leftRssi) {
-                                    bt.sendData("R");
-                            }
+                       /* if(mode==true) {
+                            bt.sendData(cary_algorithm.value_refine(leftRssi, frontRssi, rightRssi));
+                            direction.setText(cary_algorithm.value_refine(leftRssi, frontRssi, rightRssi));
                         }*/
+
+
+                        if (mode == true) {
+                            if (frontRssi >= rightRssi && frontRssi >= leftRssi) {
+                                bt.sendData("F");
+                                direction.setText("F");
+                            }
+                            //왼쪽 강할시
+                            else if (rightRssi >= frontRssi && leftRssi > rightRssi) {
+                                bt.sendData("L");
+                                direction.setText("L");
+                            }
+                            //오른쪽 강할시
+                            else if (leftRssi >= frontRssi && rightRssi > leftRssi) {
+                                bt.sendData("R");
+                                direction.setText("R");
+                            }
+                        }
                     } else {
                         flag = false;
                     }
@@ -206,13 +210,17 @@ public class Auto extends AppCompatActivity implements BeaconConsumer {
     //옵션 메뉴
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         if (item.getItemId() != R.id.auto)
             finish();
         switch (item.getItemId()) {
             case R.id.auto:
                 break;
             case R.id.passive:
-                startActivity(new Intent(Auto.this, Passive.class));
+                intent = new Intent(this, Passive.class);
+                intent.putExtra("CARY", bt.mTmp);
+                startActivity(intent);
+                //startActivity(new Intent(Auto.this, Passive.class));
                 break;
             case R.id.main:
                 //startActivity(new Intent(Auto.this, MainActivity.class));
