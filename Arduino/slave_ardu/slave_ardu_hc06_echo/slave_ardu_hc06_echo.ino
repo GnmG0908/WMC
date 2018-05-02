@@ -58,7 +58,6 @@ boolean echoLU(){
     return true;
   }
 }
-
 // 우상 초음파 측정
 boolean echoRU(){
   digitalWrite(trigPinRU, LOW);
@@ -79,6 +78,7 @@ boolean echoRU(){
     return true;
   }
 }
+/*
 // 좌하 초음파 측정
 boolean echoLD(){
   digitalWrite(trigPinLD, LOW);
@@ -88,7 +88,7 @@ boolean echoLD(){
   digitalWrite(trigPinLD, LOW);
   duration = pulseIn(echoPinLD, HIGH);
   distance = (duration/2) / 29.1;
-  if((distance >= 10) && (distance <= 150)){
+  if(((distance >= 10) && (distance <= 200)) || (distance >= 2800)){
     Serial.print("LD : ");
     Serial.print(distance);
     Serial.println(" cm");
@@ -111,7 +111,7 @@ boolean echoRD(){
   digitalWrite(trigPinRD, LOW);
   duration = pulseIn(echoPinRD, HIGH);
   distance = (duration/2) / 29.1;
-  if((distance >= 10) && (distance <= 150)){
+  if(((distance >= 10) && (distance <= 200)) || (distance >= 2800)){
     Serial.print("RD : ");
     Serial.print(distance);
     Serial.println(" cm");
@@ -125,7 +125,7 @@ boolean echoRD(){
     return false;
   }
 }
-
+*/
 // 동작
 void active(){
   if (str == "F\n"){
@@ -138,14 +138,14 @@ void active(){
     stopm();
   }
 }
-
 // 전진
 void go(){
-  bool LD = echoLD();
-  bool RD = echoRD();
+  //bool LD = echoLD();
+  //bool RD = echoRD();
   bool LU = echoLU();
   bool RU = echoRU();
-  if ((LU == true) && (RU == true) && (LD == true) && (RD == true)){
+  //if ((LU == true) && (RU == true) && (LD == true) && (RD == true)){
+  if((LU == true) && (RU == true)){
     Serial.println("직진");
     digitalWrite(dir1, LOW);
     digitalWrite(dir2, HIGH);
@@ -153,15 +153,18 @@ void go(){
     analogWrite(pwm2, 255);
     //delay(200); 
   }
+  else {
+    stopm();
+  }
 }
-
 // 좌회전
 void left(){
-  bool LD = echoLD();
-  bool RD = echoRD();
+  //bool LD = echoLD();
+  //bool RD = echoRD();
   bool LU = echoLU();
   bool RU = echoRU();
-  if ((LU == true) && (RU == true) && (LD == true) && (RD == true)){
+  //if ((LU == true) && (RU == true) && (LD == true) && (RD == true)){
+  if((LU == true) && (RU == true)){
     Serial.println("좌회전");
     digitalWrite(dir1, LOW);
     digitalWrite(dir2, HIGH);
@@ -169,15 +172,18 @@ void left(){
     analogWrite(pwm2, 255);
     //delay(200); 
   }
+  else{
+    stopm();
+  }
 }
-
 // 우회전
 void right(){
-  bool LD = echoLD();
-  bool RD = echoRD();
+  //bool LD = echoLD();
+  //bool RD = echoRD();
   bool LU = echoLU();
   bool RU = echoRU();
-  if ((LU == true) && (RU == true) && (LD == true) && (RD == true)){
+  //if ((LU == true) && (RU == true) && (LD == true) && (RD == true)){
+  if((LU == true) && (RU == true)){
     Serial.println("우회전");
     digitalWrite(dir1, LOW);
     digitalWrite(dir2, HIGH);
@@ -185,22 +191,24 @@ void right(){
     analogWrite(pwm2, 0);
     //delay(200); 
   }
+  else{
+    stopm();
+  }
 }
-
 // 정지
 void stopm(){
-  bool LU = echoLU();
-  bool RU = echoRU();
-  bool LD = echoLD();
-  bool RD = echoRD();
-  if ((LU == false) || (RU == false) || (LD == false) || (RD == false)){
+  //bool LU = echoLU();
+  //bool RU = echoRU();
+  //bool LD = echoLD();
+  //bool RD = echoRD();
+  //if ((LU == false) || (RU == false) || (LD == false) || (RD == false)){
     Serial.println("정지");
     digitalWrite(dir1, LOW);
     digitalWrite(dir2, HIGH);
     analogWrite(pwm1, 0);
     analogWrite(pwm2, 0);
     //delay(200);
-  }
+  //}
 }
 
 // 마스터로 텍스트 송신
@@ -215,10 +223,10 @@ void setup() {
   pinMode(echoPinRU, INPUT);
   pinMode(trigPinLU, OUTPUT);
   pinMode(echoPinLU, INPUT);
-  pinMode(trigPinRD, OUTPUT);
-  pinMode(echoPinRD, INPUT);
-  pinMode(trigPinLD, OUTPUT);
-  pinMode(echoPinLD, INPUT);
+  //pinMode(trigPinRD, OUTPUT);
+  //pinMode(echoPinRD, INPUT);
+  //pinMode(trigPinLD, OUTPUT);
+  //pinMode(echoPinLD, INPUT);
   Wire.begin(SLAVE);
   Wire.onReceive(receiveFromMaster);
   Wire.onRequest(sendToMaster);
