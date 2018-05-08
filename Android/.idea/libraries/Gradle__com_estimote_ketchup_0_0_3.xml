@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.estimote:ketchup-0.0.3">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ketchup-0.0.3.aar/410b8f1125966dba8693cc8ce1d4039e/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ketchup-0.0.3.aar/410b8f1125966dba8693cc8ce1d4039e/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ketchup-0.0.3.aar/db5b0fd08210c6c95f70d7e637c5a5eb/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ketchup-0.0.3.aar/db5b0fd08210c6c95f70d7e637c5a5eb/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

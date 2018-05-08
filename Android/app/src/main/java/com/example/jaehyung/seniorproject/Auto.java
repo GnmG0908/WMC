@@ -19,6 +19,8 @@ import com.estimote.coresdk.service.BeaconManager;
 
 import org.altbeacon.beacon.BeaconConsumer;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.List;
 import java.util.UUID;
 
@@ -122,17 +124,17 @@ public class Auto extends AppCompatActivity implements BeaconConsumer {
                         */
                         if (mode == true) {
                             //블루투스 송신 알고리즘
-                            if (cnt_flag == false) {
+                            /*if (cnt_flag == false) {
                                 cary_algorithm = new Cary_algorithm(leftRssi, frontRssi, rightRssi);
                                 cnt_flag = true;
                             }
                             //알고리즘 첨부 부분
                             bt.sendData(cary_algorithm.value_refine(leftRssi,frontRssi,rightRssi));
-                            direction.setText(cary_algorithm.value_refine(leftRssi,frontRssi,rightRssi));
+                            direction.setText(cary_algorithm.value_refine(leftRssi,frontRssi,rightRssi));*/
 
                             //이하 삭제 부분
                             //정면 강할시
-                            /*if (frontRssi >= rightRssi && frontRssi >= leftRssi) {
+                            if (frontRssi >= rightRssi && frontRssi >= leftRssi) {
                                 bt.sendData("F");
                                 direction.setText("F");
                             }
@@ -145,7 +147,14 @@ public class Auto extends AppCompatActivity implements BeaconConsumer {
                             else if (rightRssi >  leftRssi) {
                                 bt.sendData("R");
                                 direction.setText("R");
-                            }*/
+                            }
+                            try{
+                                BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "test.txt", true));
+                                bw.write("L:"+leftRssi+"F:"+frontRssi+"R:"+rightRssi);
+                                bw.close();
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
                     } else {
                         flag = false;
