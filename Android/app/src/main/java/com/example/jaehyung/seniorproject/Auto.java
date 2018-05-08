@@ -1,8 +1,6 @@
 package com.example.jaehyung.seniorproject;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +27,8 @@ import java.util.UUID;
  */
 
 public class Auto extends AppCompatActivity implements BeaconConsumer {
+
+    //파일 출력
 
     //Bluetooth class 선언
     Bluetooth bt = new Bluetooth();
@@ -84,13 +84,14 @@ public class Auto extends AppCompatActivity implements BeaconConsumer {
         bt.connectToSelectedDevice(bt.mTmp);
 
         testname.setText("Name:" + bt.mTmp);
-
+        beaconManager.setBackgroundScanPeriod(200,0);
+        beaconManager.setForegroundScanPeriod(200,0);
         beaconManager.setRangingListener(new BeaconManager.BeaconRangingListener() {
             @Override
             public void onBeaconsDiscovered(BeaconRegion beaconRegion, List<Beacon> beacons) {
                 if (!beacons.isEmpty()) {
                     Beacon caryf = null, caryr = null, caryl = null;
-                    Beacon nearestBeacon = beacons.get(0);
+                    //Beacon nearestBeacon = beacons.get(0);
 
                     //비콘 매칭
                     for (int i = 0; i < beacons.size(); i++) {
@@ -115,40 +116,41 @@ public class Auto extends AppCompatActivity implements BeaconConsumer {
                     }
                     if (caryf != null && caryl != null && caryr != null) {
                         flag = true;
-
-                        if (cnt_flag == false) {
-                            cary_algorithm = new Cary_algorithm(leftRssi, frontRssi, rightRssi);
-                            cnt_flag = true;
-                        }
-                        //블루투스 송신 알고리즘
-                        //정면 강할시
-                       /* if(mode==true) {
+                       /*
                             bt.sendData(cary_algorithm.value_refine(leftRssi, frontRssi, rightRssi));
                             direction.setText(cary_algorithm.value_refine(leftRssi, frontRssi, rightRssi));
-                        }*/
-
-
+                        */
                         if (mode == true) {
-                            if (frontRssi >= rightRssi && frontRssi >= leftRssi) {
+                            //블루투스 송신 알고리즘
+                            if (cnt_flag == false) {
+                                cary_algorithm = new Cary_algorithm(leftRssi, frontRssi, rightRssi);
+                                cnt_flag = true;
+                            }
+                            //알고리즘 첨부 부분
+                            bt.sendData(cary_algorithm.value_refine(leftRssi,frontRssi,rightRssi));
+                            direction.setText(cary_algorithm.value_refine(leftRssi,frontRssi,rightRssi));
+
+                            //이하 삭제 부분
+                            //정면 강할시
+                            /*if (frontRssi >= rightRssi && frontRssi >= leftRssi) {
                                 bt.sendData("F");
                                 direction.setText("F");
                             }
                             //왼쪽 강할시
-                            else if (rightRssi >= frontRssi && leftRssi > rightRssi) {
+                            else if (leftRssi > rightRssi) {
                                 bt.sendData("L");
                                 direction.setText("L");
                             }
                             //오른쪽 강할시
-                            else if (leftRssi >= frontRssi && rightRssi > leftRssi) {
+                            else if (rightRssi >  leftRssi) {
                                 bt.sendData("R");
                                 direction.setText("R");
-                            }
+                            }*/
                         }
                     } else {
                         flag = false;
                     }
-                } /*else
-                    flag = false;*/
+                }
             }
         });
 

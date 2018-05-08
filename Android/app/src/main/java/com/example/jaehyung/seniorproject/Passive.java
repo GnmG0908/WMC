@@ -70,7 +70,19 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         left.setEnabled(false);
         up.setEnabled(false);
 
-        left.setOnTouchListener(new View.OnTouchListener() {
+        left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (select % 2 == 1) {
+                    if(myview.gyroX>0)
+                        myview.gyroX = 0;
+                    myview.gyroX -= 30;
+                    myview.invalidate();
+                    bt.sendData("L");
+                }
+            }
+        });
+        /*left.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (select % 2 == 1) {
@@ -82,8 +94,20 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                 }
                 return false;
             }
+        });*/
+        right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (select % 2 == 1) {
+                    if(myview.gyroX<0)
+                        myview.gyroX =0;
+                    myview.gyroX += 30;
+                    myview.invalidate();
+                    bt.sendData("R");
+                }
+            }
         });
-        right.setOnTouchListener(new View.OnTouchListener() {
+        /*right.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (select % 2 == 1) {
@@ -95,8 +119,18 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                 }
                 return false;
             }
+        });*/
+        up.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (select % 2 == 1) {
+                    myview.gyroY += 15;
+                    myview.invalidate();
+                    bt.sendData("F");
+                }
+            }
         });
-        up.setOnTouchListener(new View.OnTouchListener() {
+        /*up.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (select % 2 == 1) {
@@ -106,7 +140,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                 }
                 return false;
             }
-        });
+        });*/
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
