@@ -10,8 +10,9 @@
     <ImageButton
         android:id="@+id/onoff"
         android:layout_width="wrap_content"
-        android:layout_height="420dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_margin="20dp"
         android:background="#FFFFFF"
         android:src="@drawable/red_start" />
     <TextView
@@ -53,7 +54,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/direction"
-        android:text="Name:"
+        android:text="Send:"
         android:textSize="5pt"
         android:gravity="center"/>
+    <Button
+        android:text="불러오기"
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
 </LinearLayout>

@@ -1,5 +1,8 @@
 package com.example.jaehyung.seniorproject;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,8 +23,12 @@ import com.estimote.coresdk.service.BeaconManager;
 
 import org.altbeacon.beacon.BeaconConsumer;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,6 +61,7 @@ public class Auto extends AppCompatActivity implements BeaconConsumer {
     ImageButton btn;
     TextView ment;
     TextView caryR, caryL, caryF, testname, direction;
+    Button btn1;
     boolean mode = false;
 
     @Override
@@ -75,6 +84,10 @@ public class Auto extends AppCompatActivity implements BeaconConsumer {
         beaconManager = new BeaconManager(this);
 
         bt.mTmp = intent.getStringExtra("CARY");
+        if (bt.mTmp == "\n") {
+            bt.connectToSelectedDevice(bt.mTmp);
+            bt.connectToSelectedDevice(bt.mTmp);
+        }
         ment = (TextView) findViewById(R.id.ment);
         btn = (ImageButton) findViewById(R.id.onoff);
         caryF = (TextView) findViewById(R.id.caryF);
@@ -82,12 +95,11 @@ public class Auto extends AppCompatActivity implements BeaconConsumer {
         caryR = (TextView) findViewById(R.id.caryR);
         testname = (TextView) findViewById(R.id.testname);
         direction = (TextView) findViewById(R.id.direction);
-        bt.connectToSelectedDevice(bt.mTmp);
-        bt.connectToSelectedDevice(bt.mTmp);
+        btn1 = (Button) findViewById(R.id.save);
 
         testname.setText("Name:" + bt.mTmp);
-        beaconManager.setBackgroundScanPeriod(200,0);
-        beaconManager.setForegroundScanPeriod(200,0);
+        beaconManager.setBackgroundScanPeriod(200, 0);
+        beaconManager.setForegroundScanPeriod(200, 0);
         beaconManager.setRangingListener(new BeaconManager.BeaconRangingListener() {
             @Override
             public void onBeaconsDiscovered(BeaconRegion beaconRegion, List<Beacon> beacons) {
@@ -144,15 +156,15 @@ public class Auto extends AppCompatActivity implements BeaconConsumer {
                                 direction.setText("L");
                             }
                             //오른쪽 강할시
-                            else if (rightRssi >  leftRssi) {
+                            else if (rightRssi > leftRssi) {
                                 bt.sendData("R");
                                 direction.setText("R");
                             }
-                            try{
+                            try {
                                 BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "test.txt", true));
-                                bw.write("L:"+leftRssi+"F:"+frontRssi+"R:"+rightRssi);
+                                bw.write("L:" + leftRssi + "F:" + frontRssi + "R:" + rightRssi);
                                 bw.close();
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
@@ -182,6 +194,32 @@ public class Auto extends AppCompatActivity implements BeaconConsumer {
                     btn.setImageResource(R.drawable.red_start);
                     bt.sendData("stop");
                 }
+            }
+        });
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(getFilesDir() + "test.txt"));
+                    String readStr = "";
+                    String str = null;
+                    while (((str = br.readLine()) != null)) {
+                        readStr += str + "\n";
+                    }
+                    br.close();
+
+                    //클립보드에 복사
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("label", readStr.substring(0, readStr.length() - 1));
+                    clipboard.setPrimaryClip(clip);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 

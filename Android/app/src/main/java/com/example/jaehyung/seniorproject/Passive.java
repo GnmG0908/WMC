@@ -57,8 +57,10 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         //intent
         bt.mTmp = intent.getStringExtra("CARY");
 
-        bt.connectToSelectedDevice(bt.mTmp);
-        bt.connectToSelectedDevice(bt.mTmp);
+        if (bt.mTmp != "\n") {
+            bt.connectToSelectedDevice(bt.mTmp);
+            bt.connectToSelectedDevice(bt.mTmp);
+        }
         //카메라뷰 선언부
         myview = new Myview(this);
         Layout.addView(myview);
@@ -74,11 +76,12 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
             @Override
             public void onClick(View view) {
                 if (select % 2 == 1) {
-                    if(myview.gyroX>0)
+                    if (myview.gyroX > 0)
                         myview.gyroX = 0;
                     myview.gyroX -= 30;
                     myview.invalidate();
-                    bt.sendData("L");
+                    if (bt.mTmp != "\n")
+                        bt.sendData("L");
                 }
             }
         });
@@ -99,11 +102,12 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
             @Override
             public void onClick(View view) {
                 if (select % 2 == 1) {
-                    if(myview.gyroX<0)
-                        myview.gyroX =0;
+                    if (myview.gyroX < 0)
+                        myview.gyroX = 0;
                     myview.gyroX += 30;
                     myview.invalidate();
-                    bt.sendData("R");
+                    if (bt.mTmp != "\n")
+                        bt.sendData("R");
                 }
             }
         });
@@ -126,7 +130,8 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                 if (select % 2 == 1) {
                     myview.gyroY += 15;
                     myview.invalidate();
-                    bt.sendData("F");
+                    if (bt.mTmp != "\n")
+                        bt.sendData("F");
                 }
             }
         });
@@ -145,9 +150,10 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
             @Override
             public void onClick(View v) {
                 myview.gyroX = 0;
-                myview.gyroY=0;
+                myview.gyroY = 0;
                 myview.invalidate();
-                bt.sendData("stop");
+                if (bt.mTmp != "\n")
+                    bt.sendData("stop");
             }
         });
         slt.setOnClickListener(new View.OnClickListener() {
@@ -157,13 +163,11 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                 myview.gyroX = 0;
                 myview.gyroY = 0;
                 myview.gyroZ = 0;
-                if(select%2==1)
-                {
+                if (select % 2 == 1) {
                     right.setEnabled(true);
                     left.setEnabled(true);
                     up.setEnabled(true);
-                }
-                else {
+                } else {
                     right.setEnabled(false);
                     left.setEnabled(false);
                     up.setEnabled(false);
@@ -182,7 +186,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
-        if (item.getItemId()!=R.id.passive)
+        if (item.getItemId() != R.id.passive)
             finish();
         switch (item.getItemId()) {
             case R.id.auto:

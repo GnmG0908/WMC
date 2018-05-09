@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mTmp != "\n") {
+        //if (mTmp != "\n") {
             Intent intent;
             switch (item.getItemId()) {
                 case R.id.auto:
@@ -317,9 +317,9 @@ public class MainActivity extends AppCompatActivity {
                 default:
                     break;
             }
-        }
-        else
-            Toast.makeText(getApplicationContext(),"블루투스가 연결되지 않았습니다.",Toast.LENGTH_LONG).show();
+        //}
+        //else
+        //    Toast.makeText(getApplicationContext(),"블루투스가 연결되지 않았습니다.",Toast.LENGTH_LONG).show();
         return super.onOptionsItemSelected(item);
     }
 
