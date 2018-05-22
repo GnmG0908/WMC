@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/AutoXml"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,52 +14,65 @@
         android:layout_margin="20dp"
         android:background="#FFFFFF"
         android:src="@drawable/red_start" />
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/ment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="자율주행을 시작할 경우 전원버튼을 눌러주세요."
-        android:textSize="5pt"
-        android:gravity="center"/>
-    <TextView
+        android:textSize="5pt" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/caryF"
-        android:text="CaryF:"
-        android:textSize="5pt"
-        android:gravity="center"/>
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/caryF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="CaryF:"
+            android:textSize="5pt" />
+        <TextView
+            android:id="@+id/caryR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="CaryR:"
+            android:textSize="5pt" />
+        <TextView
+            android:id="@+id/caryL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="CaryL:"
+            android:textSize="5pt" />
+    </LinearLayout>
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/caryR"
-        android:text="CaryR:"
-        android:textSize="5pt"
-        android:gravity="center"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/caryL"
-        android:text="CaryL:"
-        android:textSize="5pt"
-        android:gravity="center"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/testname"
-        android:text="Name:"
-        android:textSize="5pt"
-        android:gravity="center"/>
-    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Name:"
+        android:textSize="5pt" />
+
+    <TextView
         android:id="@+id/direction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="Send:"
-        android:textSize="5pt"
-        android:gravity="center"/>
+        android:textSize="5pt" />
+
     <Button
-        android:text="불러오기"
         android:id="@+id/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:text="불러오기" />
 </LinearLayout>
