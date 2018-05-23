@@ -41,7 +41,7 @@ public class Myview extends View {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.BLACK);
 
-      /*  paint.setStrokeWidth((float) (Math.abs(gyroZ) * 3.0));
+      /*paint.setStrokeWidth((float) (Math.abs(gyroZ) * 3.0));
         canvas.drawLine(200, 200, 200, 400, paint);
         canvas.drawText("Z축" + gyroZ, 200, 200, paint);
 

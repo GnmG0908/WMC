@@ -11,11 +11,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -31,7 +35,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
     Bluetooth bt = new Bluetooth();
     ImageButton left, right, up, stop;
     Button slt;
-    Myview myview;
+    //Myview myview;
 
     int select = 0;
 
@@ -40,7 +44,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.passive);
         Intent intent = getIntent();
-        LinearLayout Layout = (LinearLayout) findViewById(R.id.Myview);
+        //LinearLayout Layout = (LinearLayout) findViewById(R.id.Myview);
 
         getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.custom_passive);
@@ -62,8 +66,22 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
             bt.connectToSelectedDevice(bt.mTmp);
         }
         //카메라뷰 선언부
-        myview = new Myview(this);
-        Layout.addView(myview);
+        WebView webView = (WebView)findViewById(R.id.webView);
+        webView.setWebViewClient(new WebViewClient());
+        webView.setBackgroundColor(255);
+        //영상을 폭에 꽉 차게 할려고 했지만 먹히지 않음???
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setUseWideViewPort(true);
+        //이건 최신 버전에서는 사용하지 않게됨
+        //webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        //영상을 폭을 꽉 차게 하기 위해 직접 html태그로 작성함.
+        webView.loadData("<html><head><style type='text/css'>body{margin:auto auto;text-align:center;} img{width:100%25;} div{overflow: hidden;} </style></head><body><div><img src='http://172.30.1.56:8080/stream/video.mjpeg'/></div></body></html>" ,"text/html",  "UTF-8");
+        //webView.loadUrl("http://raspberrypi-ip:8080/stream/video.mjpeg");
+
+        //myview = new Myview(this);
+        //Layout.addView(myview);
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mGroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
@@ -76,10 +94,10 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
             @Override
             public void onClick(View view) {
                 if (select % 2 == 1) {
-                    if (myview.gyroX > 0)
+                   /* if (myview.gyroX > 0)
                         myview.gyroX = 0;
                     myview.gyroX -= 30;
-                    myview.invalidate();
+                    myview.invalidate();*/
                     if (bt.mTmp != "\n")
                         bt.sendData("L");
                 }
@@ -102,10 +120,10 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
             @Override
             public void onClick(View view) {
                 if (select % 2 == 1) {
-                    if (myview.gyroX < 0)
+                   /* if (myview.gyroX < 0)
                         myview.gyroX = 0;
                     myview.gyroX += 30;
-                    myview.invalidate();
+                    myview.invalidate();*/
                     if (bt.mTmp != "\n")
                         bt.sendData("R");
                 }
@@ -128,8 +146,8 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
             @Override
             public void onClick(View view) {
                 if (select % 2 == 1) {
-                    myview.gyroY += 15;
-                    myview.invalidate();
+                   /* myview.gyroY += 15;
+                    myview.invalidate();*/
                     if (bt.mTmp != "\n")
                         bt.sendData("F");
                 }
@@ -149,9 +167,9 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myview.gyroX = 0;
+               /* myview.gyroX = 0;
                 myview.gyroY = 0;
-                myview.invalidate();
+                myview.invalidate();*/
                 if (bt.mTmp != "\n")
                     bt.sendData("stop");
             }
@@ -160,9 +178,9 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
             @Override
             public void onClick(View v) {
                 select++;
-                myview.gyroX = 0;
+               /* myview.gyroX = 0;
                 myview.gyroY = 0;
-                myview.gyroZ = 0;
+                myview.gyroZ = 0;*/
                 if (select % 2 == 1) {
                     right.setEnabled(true);
                     left.setEnabled(true);
@@ -222,23 +240,23 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         mSensorManager.unregisterListener(this);
     }
 
+
+    //자이로 센서 부분
     @Override
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor;
         if (sensor.getType() == Sensor.TYPE_GYROSCOPE && select % 2 == 0) {
-            myview.gyroX += Math.round(event.values[0] * 100);
+           /* myview.gyroX += Math.round(event.values[0] * 100);
             myview.gyroY += Math.round(event.values[1] * 100);
             myview.gyroZ += Math.round(event.values[2] * 100);
-            myview.invalidate();
+            myview.invalidate();*/
             /*System.out.println("gyroX =" + myview.gyroX);
             System.out.println("gyroY =" + myview.gyroY);
             System.out.println("gyroZ =" + myview.gyroZ);*/
         }
 
     }
-
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 }

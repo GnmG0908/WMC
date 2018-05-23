@@ -19,12 +19,13 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/Myview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"></LinearLayout>
+        <!-- 카메라 뷰 부분-->
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+        <!-- 카메라 뷰 부분-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,9 +44,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_weight="1"
-                >
+                android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/left"
@@ -57,18 +57,18 @@
 
                 <ImageButton
                     android:id="@+id/stop"
-                    android:src="@drawable/stop"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:src="@drawable/stop"
                     android:text="STOP" />
 
                 <ImageButton
                     android:id="@+id/right"
-                    android:src="@drawable/right"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:src="@drawable/right"
                     android:text="RIGHT" />
             </LinearLayout>
 
