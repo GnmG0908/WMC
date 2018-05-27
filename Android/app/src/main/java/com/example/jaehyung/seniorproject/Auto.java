@@ -22,6 +22,7 @@ import com.estimote.coresdk.recognition.packets.Beacon;
 import com.estimote.coresdk.service.BeaconManager;
 
 import org.altbeacon.beacon.BeaconConsumer;
+import org.altbeacon.beacon.service.RssiFilter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -36,7 +37,7 @@ import java.util.UUID;
  * Created by Jaehyung on 2017-12-28.
  */
 
-public class Auto extends AppCompatActivity implements BeaconConsumer {
+public class Auto extends AppCompatActivity implements BeaconConsumer{
 
     //파일 출력
 
