@@ -47,6 +47,8 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
 
     //알고리즘 부
     Cary_algorithm cary_algorithm = null;
+    KalmanFilter cary2_algorithm = new KalmanFilter();
+    algo algo = new algo();
 
     //FLAG
     boolean flag = false;
@@ -57,7 +59,7 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
     BeaconRegion region;
 
     //비콘 값 정제
-    int frontRssi = 0, rightRssi = 0, leftRssi = 0;
+    double frontRssi = 0, rightRssi = 0, leftRssi = 0;
 
     ImageButton btn;
     TextView ment;
@@ -119,15 +121,17 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
                     }
                     if (caryf != null) {
                         frontRssi = caryf.getRssi();
-                        caryF.setText("CaryFront : " + frontRssi);
+                        //frontRssi=);
+                        caryF.setText("CaryFront \n " + frontRssi);
                     }
                     if (caryr != null) {
                         rightRssi = caryr.getRssi();
-                        caryR.setText("CaryRight : " + rightRssi);
+                        caryR.setText("CaryRight \n " + rightRssi);
                     }
                     if (caryl != null) {
-                        leftRssi = caryl.getRssi();
-                        caryL.setText("CaryLeft : " + leftRssi);
+                        //leftRssi = caryl.getRssi();
+                        leftRssi=algo.applyFilter(caryl.getRssi());
+                        caryL.setText("CaryLeft \n " + leftRssi);
                     }
                     if (caryf != null && caryl != null && caryr != null) {
                         flag = true;

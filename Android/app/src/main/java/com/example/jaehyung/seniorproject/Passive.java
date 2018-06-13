@@ -77,7 +77,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         //영상을 폭을 꽉 차게 하기 위해 직접 html태그로 작성함.
-        webView.loadData("<html><head><style type='text/css'>body{margin:auto auto;text-align:center;} img{width:100%25;} div{overflow: hidden;} </style></head><body><div><img src='http://172.30.1.56:8080/stream/video.mjpeg'/></div></body></html>" ,"text/html",  "UTF-8");
+        webView.loadData("<html><head><style type='text/css'>body{margin:auto auto;text-align:center;} img{width:100%25;} div{overflow: hidden;} </style></head><body><div><img src='http://169.254.112.148:8080/stream/video.mjpeg'/></div></body></html>" ,"text/html",  "UTF-8");
         //webView.loadUrl("http://raspberrypi-ip:8080/stream/video.mjpeg");
 
         //myview = new Myview(this);
