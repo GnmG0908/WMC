@@ -45,10 +45,13 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
     Bluetooth bt = new Bluetooth();
     String test;
 
+    //비콘 필터 부
+    algo Lfilter = new algo();
+    algo Rfilter = new algo();
+    algo Ffilter = new algo();
+
     //알고리즘 부
     Cary_algorithm cary_algorithm = null;
-    KalmanFilter cary2_algorithm = new KalmanFilter();
-    algo algo = new algo();
 
     //FLAG
     boolean flag = false;
@@ -87,7 +90,7 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
         beaconManager = new BeaconManager(this);
 
         bt.mTmp = intent.getStringExtra("CARY");
-        if (bt.mTmp == "\n") {
+        if (bt.mTmp != "\n") {
             bt.connectToSelectedDevice(bt.mTmp);
             bt.connectToSelectedDevice(bt.mTmp);
         }
@@ -120,38 +123,41 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
                             caryl = beacons.get(i);
                     }
                     if (caryf != null) {
-                        frontRssi = caryf.getRssi();
-                        //frontRssi=);
-                        caryF.setText("CaryFront \n " + frontRssi);
+                        //frontRssi = caryf.getRssi();
+                        frontRssi = Ffilter.applyFilter(caryf.getRssi());
+                        caryF.setText("CaryFront \n " +String.format("%.2f",frontRssi));
                     }
                     if (caryr != null) {
-                        rightRssi = caryr.getRssi();
-                        caryR.setText("CaryRight \n " + rightRssi);
+                        //rightRssi = caryr.getRssi();
+                        rightRssi = Rfilter.applyFilter(caryr.getRssi());
+                        caryR.setText("CaryRight \n " + String.format("%.2f",rightRssi));
                     }
                     if (caryl != null) {
                         //leftRssi = caryl.getRssi();
-                        leftRssi=algo.applyFilter(caryl.getRssi());
-                        caryL.setText("CaryLeft \n " + leftRssi);
+                        leftRssi=Lfilter.applyFilter(caryl.getRssi());
+                        caryL.setText("CaryLeft \n " +String.format("%.2f",leftRssi));
                     }
+                    //알고리즘 부분
                     if (caryf != null && caryl != null && caryr != null) {
                         flag = true;
-                       /*
-                            bt.sendData(cary_algorithm.value_refine(leftRssi, frontRssi, rightRssi));
-                            direction.setText(cary_algorithm.value_refine(leftRssi, frontRssi, rightRssi));
-                        */
                         if (mode == true) {
-                            //블루투스 송신 알고리즘
-                            /*if (cnt_flag == false) {
-                                cary_algorithm = new Cary_algorithm(leftRssi, frontRssi, rightRssi);
-                                cnt_flag = true;
-                            }
-                            //알고리즘 첨부 부분
-                            bt.sendData(cary_algorithm.value_refine(leftRssi,frontRssi,rightRssi));
-                            direction.setText(cary_algorithm.value_refine(leftRssi,frontRssi,rightRssi));*/
+                            if (rightRssi-leftRssi>-3.5&&rightRssi-leftRssi<3.5){
+                                bt.sendData("F");
+                                direction.setText("F");
 
-                            //이하 삭제 부분
-                            //정면 강할시
-                            if (frontRssi >= rightRssi && frontRssi >= leftRssi) {
+                            }
+                            else{
+                                if(rightRssi>leftRssi){
+                                    bt.sendData("R");
+                                    direction.setText("R");
+                                }
+                                if (rightRssi<leftRssi){
+                                    bt.sendData("L");
+                                    direction.setText("L");
+                                }
+                            }
+                            //수정1
+                           /* if (frontRssi >= rightRssi && frontRssi >= leftRssi) {
                                 bt.sendData("F");
                                 direction.setText("F");
                             }
@@ -164,14 +170,14 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
                             else if (rightRssi > leftRssi) {
                                 bt.sendData("R");
                                 direction.setText("R");
-                            }
-                            try {
+                            }*/
+                            /*try {
                                 BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "test.txt", true));
                                 bw.write("L:" + leftRssi + "F:" + frontRssi + "R:" + rightRssi);
                                 bw.close();
                             } catch (Exception e) {
                                 e.printStackTrace();
-                            }
+                            }*/
                         }
                     } else {
                         flag = false;

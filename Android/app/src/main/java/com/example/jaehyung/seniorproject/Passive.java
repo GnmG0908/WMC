@@ -25,6 +25,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.estimote.coresdk.cloud.model.Telemetry;
+
 /**
  * Created by Jaehyung on 2017-12-28.
  */
@@ -56,7 +58,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         up = (ImageButton) findViewById(R.id.up);
         right = (ImageButton) findViewById(R.id.right);
         stop = (ImageButton) findViewById(R.id.stop);
-        slt = (Button) findViewById(R.id.slt);
+        //slt = (Button) findViewById(R.id.slt);
 
         //intent
         bt.mTmp = intent.getStringExtra("CARY");
@@ -66,7 +68,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
             bt.connectToSelectedDevice(bt.mTmp);
         }
         //카메라뷰 선언부
-        WebView webView = (WebView)findViewById(R.id.webView);
+        WebView webView = (WebView) findViewById(R.id.webView);
         webView.setWebViewClient(new WebViewClient());
         webView.setBackgroundColor(255);
         //영상을 폭에 꽉 차게 할려고 했지만 먹히지 않음???
@@ -77,7 +79,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         //영상을 폭을 꽉 차게 하기 위해 직접 html태그로 작성함.
-        webView.loadData("<html><head><style type='text/css'>body{margin:auto auto;text-align:center;} img{width:100%25;} div{overflow: hidden;} </style></head><body><div><img src='http://169.254.112.148:8080/stream/video.mjpeg'/></div></body></html>" ,"text/html",  "UTF-8");
+        webView.loadData("<html><head><style type='text/css'>body{margin:auto auto;text-align:center;} img{width:100%25;} div{overflow: hidden;} </style></head><body><div><img src='http://169.254.112.148:8080/stream/video.mjpeg'/></div></body></html>", "text/html", "UTF-8");
         //webView.loadUrl("http://raspberrypi-ip:8080/stream/video.mjpeg");
 
         //myview = new Myview(this);
@@ -86,21 +88,37 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mGroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
-        right.setEnabled(false);
+        /*right.setEnabled(false);
         left.setEnabled(false);
-        up.setEnabled(false);
+        up.setEnabled(false);*/
 
-        left.setOnClickListener(new View.OnClickListener() {
+        /*left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (select % 2 == 1) {
-                   /* if (myview.gyroX > 0)
+                   *//* if (myview.gyroX > 0)
                         myview.gyroX = 0;
                     myview.gyroX -= 30;
-                    myview.invalidate();*/
+                    myview.invalidate();*//*
                     if (bt.mTmp != "\n")
                         bt.sendData("L");
                 }
+            }
+        });*/
+        left.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (bt.mTmp != "\n")
+                            bt.sendData("L");
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (bt.mTmp != "\n")
+                            bt.sendData("stop");
+                        break;
+                }
+                return true;
             }
         });
         /*left.setOnTouchListener(new View.OnTouchListener() {
@@ -116,17 +134,33 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                 return false;
             }
         });*/
-        right.setOnClickListener(new View.OnClickListener() {
+        /*right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (select % 2 == 1) {
-                   /* if (myview.gyroX < 0)
+                   *//* if (myview.gyroX < 0)
                         myview.gyroX = 0;
                     myview.gyroX += 30;
-                    myview.invalidate();*/
+                    myview.invalidate();*//*
                     if (bt.mTmp != "\n")
                         bt.sendData("R");
                 }
+            }
+        });*/
+        right.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (bt.mTmp != "\n")
+                            bt.sendData("R");
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (bt.mTmp != "\n")
+                            bt.sendData("stop");
+                        break;
+                }
+                return true;
             }
         });
         /*right.setOnTouchListener(new View.OnTouchListener() {
@@ -142,15 +176,31 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                 return false;
             }
         });*/
-        up.setOnClickListener(new View.OnClickListener() {
+        /*up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (select % 2 == 1) {
-                   /* myview.gyroY += 15;
-                    myview.invalidate();*/
+                   *//* myview.gyroY += 15;
+                    myview.invalidate();*//*
                     if (bt.mTmp != "\n")
                         bt.sendData("F");
                 }
+            }
+        });*/
+        up.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (bt.mTmp != "\n")
+                            bt.sendData("F");
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (bt.mTmp != "\n")
+                            bt.sendData("stop");
+                        break;
+                }
+                return true;
             }
         });
         /*up.setOnTouchListener(new View.OnTouchListener() {
@@ -174,13 +224,13 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                     bt.sendData("stop");
             }
         });
-        slt.setOnClickListener(new View.OnClickListener() {
+        /*slt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 select++;
-               /* myview.gyroX = 0;
+               *//* myview.gyroX = 0;
                 myview.gyroY = 0;
-                myview.gyroZ = 0;*/
+                myview.gyroZ = 0;*//*
                 if (select % 2 == 1) {
                     right.setEnabled(true);
                     left.setEnabled(true);
@@ -191,7 +241,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                     up.setEnabled(false);
                 }
             }
-        });
+        });*/
     }
 
     @Override
@@ -256,6 +306,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         }
 
     }
+
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
