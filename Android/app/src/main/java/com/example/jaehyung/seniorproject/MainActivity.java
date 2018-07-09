@@ -1,13 +1,11 @@
 package com.example.jaehyung.seniorproject;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,13 +16,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -44,9 +41,9 @@ public class MainActivity extends AppCompatActivity {
     OutputStream mOutputStream = null;
     InputStream mInputStream = null;
 
-    Button conbtn, mTest;
-    TextView mConnetDiv, mRev, Title;
-    EditText mEdit;
+    //Button conbtn;
+    TextView mConnetDiv, mRev;
+    ListView mBluetoothList;
 
     String mTmp="\n";
     String mStrDlimiter = "\n";
@@ -59,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     int BackButtonCounter = 0;   // 뒤로가기 키 제어
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    //@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,20 +69,48 @@ public class MainActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
         setContentView(R.layout.activity_main);
-        conbtn = (Button) findViewById(R.id.conbtn);
-        //Title=(TextView)findViewById(R.id.mytitle);
-        //Title.setText("연결 설정");
-        mConnetDiv = (TextView) findViewById(R.id.connectdiv);
-        mEdit = (EditText) findViewById(R.id.SendTxt);
-        mTest = (Button) findViewById(R.id.test);
-        mRev = (TextView) findViewById(R.id.RevTxt);
-        conbtn.setOnClickListener(new View.OnClickListener() {
+        //conbtn = (Button) findViewById(R.id.conbtn);    // 연결 시도 버튼
+        mConnetDiv = (TextView) findViewById(R.id.connectdiv); //연결된 기기 이름
+        mBluetoothList = (ListView)findViewById(R.id.listview); //리스트 뷰
+        //mEdit = (EditText) findViewById(R.id.SendTxt);    //보낼 에디트 텍스트 부분
+        //mTest = (Button) findViewById(R.id.test);   // 보내기 버튼
+        //mRev = (TextView) findViewById(R.id.RevTxt);  //받은 메세지
+
+        //데이터를 저장하게 되는 리스트
+        List<String> list = new ArrayList<>();
+        //리스트뷰와 리스트를 연결하기 위해 사용되는 어댑터
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,list);
+
+        mBluetoothList.setAdapter(adapter);
+        mBluetoothList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String selected_item= (String)adapterView.getItemAtPosition(i);
+                Toast.makeText(getApplicationContext(),selected_item,Toast.LENGTH_LONG).show();
+                connectToSelectedDevice(selected_item);
+            }
+        });
+
+        //리스트 뷰에 페어링 목록 띄우기
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mDevices = mBluetoothAdapter.getBondedDevices();
+        mPariedDeviceCount = mDevices.size();
+        // 각 디바이스는 이름과(서로 다른) 주소를 가진다. 페어링 된 디바이스들을 표시한다.
+        for (BluetoothDevice device : mDevices) {
+            // device.getName() : 단말기의 Bluetooth Adapter 이름을 반환.
+            list.add(device.getName());
+        }
+        /*리스트 뷰에 페어링 목록 띄우기*/
+
+
+        /*conbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getApplicationContext(),"hello",Toast.LENGTH_LONG).show();
                 checkBluetooth();
             }
-        });
+        });*/
+        /*
         mTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "블루투스와 연결되지 않았습니다.", Toast.LENGTH_LONG).show();
                 mEdit.setText("");
             }
-        });
+        });*/
     }
 
     //블루투스 부분

@@ -24,12 +24,14 @@
             android:id="@+id/webView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:layout_weight="1" />
         <!-- 카메라 뷰 부분-->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="2"
             android:orientation="vertical">
 
@@ -71,13 +73,6 @@
                     android:src="@drawable/right"
                     android:text="RIGHT" />
             </LinearLayout>
-
-            <!--<Button
-                android:id="@+id/slt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="SWITCH" />-->
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

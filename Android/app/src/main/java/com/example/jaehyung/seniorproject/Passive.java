@@ -36,8 +36,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
     private Sensor mGroscope;
     Bluetooth bt = new Bluetooth();
     ImageButton left, right, up, stop;
-    Button slt;
-    //Myview myview;
+
 
     int select = 0;
 
@@ -46,7 +45,6 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.passive);
         Intent intent = getIntent();
-        //LinearLayout Layout = (LinearLayout) findViewById(R.id.Myview);
 
         getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.custom_passive);
@@ -58,7 +56,6 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         up = (ImageButton) findViewById(R.id.up);
         right = (ImageButton) findViewById(R.id.right);
         stop = (ImageButton) findViewById(R.id.stop);
-        //slt = (Button) findViewById(R.id.slt);
 
         //intent
         bt.mTmp = intent.getStringExtra("CARY");
@@ -79,18 +76,15 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         //영상을 폭을 꽉 차게 하기 위해 직접 html태그로 작성함.
-        webView.loadData("<html><head><style type='text/css'>body{margin:auto auto;text-align:center;} img{width:100%25;} div{overflow: hidden;} </style></head><body><div><img src='http://169.254.112.148:8080/stream/video.mjpeg'/></div></body></html>", "text/html", "UTF-8");
-        //webView.loadUrl("http://raspberrypi-ip:8080/stream/video.mjpeg");
+        //webView.loadUrl("http://www.youtube.com");
+        webView.loadData("<html><head><style type='text/css'>body{margin:auto auto;text-align:center;} img{width:100%25;} div{overflow: hidden;} </style></head><body><div><img src='http://192.168.137.115:8080/stream/video.mjpeg'/></div></body></html>", "text/html", "UTF-8");
+        //webView.loadUrl("http://192.168.137.115:8080/stream");
 
-        //myview = new Myview(this);
+
         //Layout.addView(myview);
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mGroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-
-        /*right.setEnabled(false);
-        left.setEnabled(false);
-        up.setEnabled(false);*/
 
         /*left.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +105,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         if (bt.mTmp != "\n")
-                            bt.sendData("L");
+                            bt.sendData("HL");
                         break;
                     case MotionEvent.ACTION_UP:
                         if (bt.mTmp != "\n")
@@ -121,19 +115,6 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                 return true;
             }
         });
-        /*left.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (select % 2 == 1) {
-                    if(myview.gyroX>0)
-                        myview.gyroX = 0;
-                    myview.gyroX -= 30;
-                    myview.invalidate();
-                    bt.sendData("L");
-                }
-                return false;
-            }
-        });*/
         /*right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -153,7 +134,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         if (bt.mTmp != "\n")
-                            bt.sendData("R");
+                            bt.sendData("HR");
                         break;
                     case MotionEvent.ACTION_UP:
                         if (bt.mTmp != "\n")
@@ -163,19 +144,6 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                 return true;
             }
         });
-        /*right.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (select % 2 == 1) {
-                    if(myview.gyroX<0)
-                        myview.gyroX =0;
-                    myview.gyroX += 30;
-                    myview.invalidate();
-                    bt.sendData("R");
-                }
-                return false;
-            }
-        });*/
         /*up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -203,17 +171,6 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                 return true;
             }
         });
-        /*up.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (select % 2 == 1) {
-                    myview.gyroY += 15;
-                    myview.invalidate();
-                    bt.sendData("F");
-                }
-                return false;
-            }
-        });*/
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -224,24 +181,6 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
                     bt.sendData("stop");
             }
         });
-        /*slt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                select++;
-               *//* myview.gyroX = 0;
-                myview.gyroY = 0;
-                myview.gyroZ = 0;*//*
-                if (select % 2 == 1) {
-                    right.setEnabled(true);
-                    left.setEnabled(true);
-                    up.setEnabled(true);
-                } else {
-                    right.setEnabled(false);
-                    left.setEnabled(false);
-                    up.setEnabled(false);
-                }
-            }
-        });*/
     }
 
     @Override

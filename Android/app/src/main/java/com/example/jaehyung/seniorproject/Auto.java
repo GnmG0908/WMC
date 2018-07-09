@@ -22,7 +22,6 @@ import com.estimote.coresdk.recognition.packets.Beacon;
 import com.estimote.coresdk.service.BeaconManager;
 
 import org.altbeacon.beacon.BeaconConsumer;
-import org.altbeacon.beacon.service.RssiFilter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -39,23 +38,20 @@ import java.util.UUID;
 
 public class Auto extends AppCompatActivity implements BeaconConsumer{
 
-    //파일 출력
-
     //Bluetooth class 선언
     Bluetooth bt = new Bluetooth();
-    String test;
 
     //비콘 필터 부
-    algo Lfilter = new algo();
-    algo Rfilter = new algo();
-    algo Ffilter = new algo();
+    Filter Lfilter = new Filter();
+    Filter Rfilter = new Filter();
+    Filter Ffilter = new Filter();
 
     //알고리즘 부
-    Cary_algorithm cary_algorithm = null;
+    int counter=0;
+    Algorithm cary_algorithm = new Algorithm();
 
     //FLAG
     boolean flag = false;
-    boolean cnt_flag = false;
 
     //비콘 부분
     private BeaconManager beaconManager;
@@ -64,10 +60,12 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
     //비콘 값 정제
     double frontRssi = 0, rightRssi = 0, leftRssi = 0;
 
+    //시작 버튼
     ImageButton btn;
+    //버튼 밑 조그마한 안내 메세지
     TextView ment;
+    //testname = Name: ,direction = Send
     TextView caryR, caryL, caryF, testname, direction;
-    Button btn1;
     boolean mode = false;
 
     @Override
@@ -87,13 +85,17 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
         getSupportActionBar().setElevation(5);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
+        //비콘 컨트롤 하는 클래스 선언
         beaconManager = new BeaconManager(this);
 
+        //액티비티간 연결되는 블루투스 이름 파라미터
         bt.mTmp = intent.getStringExtra("CARY");
         if (bt.mTmp != "\n") {
             bt.connectToSelectedDevice(bt.mTmp);
             bt.connectToSelectedDevice(bt.mTmp);
         }
+
+        //디자인 포인트 선언
         ment = (TextView) findViewById(R.id.ment);
         btn = (ImageButton) findViewById(R.id.onoff);
         caryF = (TextView) findViewById(R.id.caryF);
@@ -101,11 +103,13 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
         caryR = (TextView) findViewById(R.id.caryR);
         testname = (TextView) findViewById(R.id.testname);
         direction = (TextView) findViewById(R.id.direction);
-        btn1 = (Button) findViewById(R.id.save);
 
+        //기기 이름 설정
         testname.setText("Name:" + bt.mTmp);
+        //비콘 수신 주기 설정
         beaconManager.setBackgroundScanPeriod(200, 0);
         beaconManager.setForegroundScanPeriod(200, 0);
+        //비콘 값 읽는 방법 설정
         beaconManager.setRangingListener(new BeaconManager.BeaconRangingListener() {
             @Override
             public void onBeaconsDiscovered(BeaconRegion beaconRegion, List<Beacon> beacons) {
@@ -116,35 +120,42 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
                     //비콘 매칭
                     for (int i = 0; i < beacons.size(); i++) {
                         if (beacons.get(i).getMacAddress().toString().equals("[D4:36:39:D8:DA:A9]"))
-                            caryf = beacons.get(i);
-                        if (beacons.get(i).getMacAddress().toString().equals("[D4:36:39:D8:B3:F7]"))
                             caryr = beacons.get(i);
+                        if (beacons.get(i).getMacAddress().toString().equals("[D4:36:39:D8:B3:F7]"))
+                            caryf = beacons.get(i);
                         if (beacons.get(i).getMacAddress().toString().equals("[D4:36:39:D8:B3:0B]"))
                             caryl = beacons.get(i);
                     }
+                    //비콘 F 인식
                     if (caryf != null) {
-                        //frontRssi = caryf.getRssi();
                         frontRssi = Ffilter.applyFilter(caryf.getRssi());
                         caryF.setText("CaryFront \n " +String.format("%.2f",frontRssi));
                     }
+                    //비콘 R 인식
                     if (caryr != null) {
-                        //rightRssi = caryr.getRssi();
                         rightRssi = Rfilter.applyFilter(caryr.getRssi());
                         caryR.setText("CaryRight \n " + String.format("%.2f",rightRssi));
                     }
+                    //비콘 L 인식
                     if (caryl != null) {
-                        //leftRssi = caryl.getRssi();
                         leftRssi=Lfilter.applyFilter(caryl.getRssi());
                         caryL.setText("CaryLeft \n " +String.format("%.2f",leftRssi));
                     }
-                    //알고리즘 부분
+                    //필요한 비콘 모두 인식
                     if (caryf != null && caryl != null && caryr != null) {
+                        //비콘 On,Off 스위치 플래그
                         flag = true;
+                        //비콘 필터 적용시 사용되는 값
+                        counter=(Lfilter.counter+Rfilter.counter+Ffilter.counter)/3;
+                        direction.setText(cary_algorithm.algorithm(frontRssi,leftRssi,rightRssi));
                         if (mode == true) {
-                            if (rightRssi-leftRssi>-3.5&&rightRssi-leftRssi<3.5){
+                            //알고리즘 적용
+                            bt.sendData(cary_algorithm.algorithm(frontRssi,leftRssi,rightRssi));
+
+                            // 임시방편
+                            /*if (rightRssi-leftRssi>-3.5&&rightRssi-leftRssi<3.5){
                                 bt.sendData("F");
                                 direction.setText("F");
-
                             }
                             else{
                                 if(rightRssi>leftRssi){
@@ -155,9 +166,10 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
                                     bt.sendData("L");
                                     direction.setText("L");
                                 }
-                            }
-                            //수정1
-                           /* if (frontRssi >= rightRssi && frontRssi >= leftRssi) {
+                            }*/
+
+                            //기본 처리
+                            /*if (frontRssi >= rightRssi && frontRssi >= leftRssi) {
                                 bt.sendData("F");
                                 direction.setText("F");
                             }
@@ -171,13 +183,6 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
                                 bt.sendData("R");
                                 direction.setText("R");
                             }*/
-                            /*try {
-                                BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "test.txt", true));
-                                bw.write("L:" + leftRssi + "F:" + frontRssi + "R:" + rightRssi);
-                                bw.close();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }*/
                         }
                     } else {
                         flag = false;
@@ -186,16 +191,20 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
             }
         });
 
+        //ON OFF 버튼 이벤트
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //자율주행 실행
                 if (mode == false) {
-                    if (flag == true) {
+                    if (flag == true&&counter==10) {
                         mode = true;
                         ment.setText("자율주행을 종료할 경우 전원버튼을 눌러주세요.");
                         btn.setImageResource(R.drawable.blue_start);
-                    } else
+                    }
+                    else if(counter<10&&counter>2)
+                        Toast.makeText(getApplicationContext(),"센서값 점검중입니다. 잠시만 기다려주세요.",Toast.LENGTH_LONG).show();
+                    else
                         Toast.makeText(getApplicationContext(), "비콘이 인식되지 않습니다, \nCARY근처로 이동해 주세요", Toast.LENGTH_LONG).show();
                 }
                 //자율주행 종료
@@ -207,43 +216,16 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
                 }
             }
         });
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                try {
-                    BufferedReader br = new BufferedReader(new FileReader(getFilesDir() + "test.txt"));
-                    String readStr = "";
-                    String str = null;
-                    while (((str = br.readLine()) != null)) {
-                        readStr += str + "\n";
-                    }
-                    br.close();
-
-                    //클립보드에 복사
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("label", readStr.substring(0, readStr.length() - 1));
-                    clipboard.setPrimaryClip(clip);
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-
         try {
             region = new BeaconRegion("iBeacon", UUID.fromString("74278bda-b644-4520-8f0c-720eaf059935"), 4660, 64001);//본인이 연결할 비콘의 아이디와 메이저(0x1234)/마이너(0xfa01 코드를 알아야 한다.);
         } catch (Exception e) {
         }
     }
 
+    //오픈소스
     @Override
     protected void onResume() {
         super.onResume();
-
         SystemRequirementsChecker.checkWithDefaultDialogs(this);
         beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
             @Override
@@ -251,15 +233,14 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
                 beaconManager.startRanging(region);
             }
         });
-
     }
-
+    //오픈소스
     @Override
     protected void onPause() {
         super.onPause();
     }
 
-    //옵션 메뉴
+    //옵션 메뉴 생성
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -267,7 +248,7 @@ public class Auto extends AppCompatActivity implements BeaconConsumer{
         return super.onCreateOptionsMenu(menu);
     }
 
-    //옵션 메뉴
+    //옵션 메뉴 이벤트 처리
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
