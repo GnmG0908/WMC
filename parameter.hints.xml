@@ -4,6 +4,7 @@
       <blacklist language="Java">
         <added pattern="org.altbeacon.beacon.Region.Region(uniqueId,id1,id2,id3)" />
         <added pattern="com.estimote.coresdk.observation.region.beacon.BeaconRegion.BeaconRegion(identifier,proximityUUID,major,minor)" />
+        <added pattern="com.nhn.android.maps.overlay.NMapPOIdata.addPOIitem(v,v1,s,i,i1)" />
       </blacklist>
     </blacklists>
   </component>
