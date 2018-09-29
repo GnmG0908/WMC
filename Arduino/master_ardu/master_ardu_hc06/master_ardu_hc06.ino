@@ -54,7 +54,7 @@ boolean echoL(){
   distance = (duration/2) / 29.1;
   Serial.print("L : ");
   Serial.println(distance);
-  if(distance <= 30){
+  if(distance < 20){
     return false;
   }
   else{
@@ -72,7 +72,7 @@ boolean echoR(){
   distance = (duration/2) / 29.1;
   Serial.print("R : ");
   Serial.println(distance);
-  if(distance <= 30){
+  if(distance < 20){
     return false;
   }
   else{

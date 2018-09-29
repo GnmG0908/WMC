@@ -8,11 +8,11 @@
 #define echoPinRU 4
 #define trigPinRU 5
 // 좌하 초음파
-#define echoPinLD 6
-#define trigPinLD 7
+//#define echoPinLD 6
+//#define trigPinLD 7
 // 우하 초음파
-#define echoPinRD 8
-#define trigPinRD 9
+//#define echoPinRD 8
+//#define trigPinRD 9
 // 좌측 모터
 #define dir1 10
 #define pwm1 11
@@ -47,7 +47,7 @@ boolean echoLU(){
   digitalWrite(trigPinLU, LOW);
   duration = pulseIn(echoPinLU, HIGH);
   distance = (duration/2) / 29.1;
-  if(distance < 100){
+  if(distance < 70){
     Serial.println("LU false");
     return false;
   }
@@ -67,7 +67,7 @@ boolean echoRU(){
   digitalWrite(trigPinRU, LOW);
   duration = pulseIn(echoPinRU, HIGH);
   distance = (duration/2) / 29.1;
-  if(distance < 100){
+  if(distance < 70){
     Serial.println("RU false");
     return false;
   }
@@ -134,6 +134,10 @@ void active(){
     left();
   } else if (str == "R\n"){
     right();
+  } else if (str == "HL\n"){
+    hleft();
+  } else if (str == "HR\n"){
+    hright();
   } else if (str == "stop\n"){
     stopm();
   }
@@ -151,7 +155,7 @@ void go(){
     digitalWrite(dir2, HIGH);
     analogWrite(pwm1, 255);
     analogWrite(pwm2, 255);
-    delay(450); 
+    //delay(200); 
   }
   else {
     stopm();
@@ -159,6 +163,7 @@ void go(){
 }
 // 좌회전
 void left(){
+  //go();
   //bool LD = echoLD();
   //bool RD = echoRD();
   bool LU = echoLU();
@@ -170,8 +175,8 @@ void left(){
     digitalWrite(dir2, HIGH);
     analogWrite(pwm1, 0);
     analogWrite(pwm2, 255);
-    delay(200);
-    go();
+    //delay(200);
+    //go();
   }
   else{
     stopm();
@@ -179,6 +184,7 @@ void left(){
 }
 // 우회전
 void right(){
+  //go();
   //bool LD = echoLD();
   //bool RD = echoRD();
   bool LU = echoLU();
@@ -190,8 +196,38 @@ void right(){
     digitalWrite(dir2, HIGH);
     analogWrite(pwm1, 255);
     analogWrite(pwm2, 0);
-    delay(200);
-    go(); 
+    //delay(200);
+    //go();
+  }
+  else{
+    stopm();
+  }
+}
+// 수동 좌회전
+void hleft(){
+  bool LU = echoLU();
+  bool RU = echoRU();
+  if((LU == true) && (RU == true)){
+    Serial.println("좌회전");
+    digitalWrite(dir1, LOW);
+    digitalWrite(dir2, HIGH);
+    analogWrite(pwm1, 0);
+    analogWrite(pwm2, 255);
+  }
+  else{
+    stopm();
+  }
+}
+// 수동 우회전
+void hright(){
+  bool LU = echoLU();
+  bool RU = echoRU();
+  if((LU == true) && (RU == true)){
+    Serial.println("우회전");
+    digitalWrite(dir1, LOW);
+    digitalWrite(dir2, HIGH);
+    analogWrite(pwm1, 255);
+    analogWrite(pwm2, 0);
   }
   else{
     stopm();
