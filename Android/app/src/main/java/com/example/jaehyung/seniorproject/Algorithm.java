@@ -45,7 +45,7 @@ public class Algorithm {
                 }
                 if (l - r > 2.8) {
                     result = "L";
-                    weight += 0.1;
+                    weight += 0.2;
                     flag = true;
                 }
             }

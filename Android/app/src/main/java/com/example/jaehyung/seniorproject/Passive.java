@@ -77,7 +77,7 @@ public class Passive extends AppCompatActivity implements SensorEventListener {
         webSettings.setJavaScriptEnabled(true);
         //영상을 폭을 꽉 차게 하기 위해 직접 html태그로 작성함.
         //webView.loadUrl("http://www.youtube.com");
-        webView.loadData("<html><head><style type='text/css'>body{margin:auto auto;text-align:center;} img{width:100%25;} div{overflow: hidden;} </style></head><body><div><img src='http://192.168.137.115:8080/stream/video.mjpeg'/></div></body></html>", "text/html", "UTF-8");
+        webView.loadData("<html><head><style type='text/css'>body{margin:auto auto;text-align:center;} img{width:100%25;} div{overflow: hidden;} </style></head><body><div><img src=http://192.168.137.177:8080/stream/video.mjpeg'/></div></body></html>", "text/html", "UTF-8");
         //webView.loadUrl("http://192.168.137.115:8080/stream");
 
 
