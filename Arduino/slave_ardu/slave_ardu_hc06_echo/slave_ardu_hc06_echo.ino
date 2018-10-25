@@ -7,12 +7,6 @@
 // 우상 초음파
 #define echoPinRU 4
 #define trigPinRU 5
-// 좌하 초음파
-//#define echoPinLD 6
-//#define trigPinLD 7
-// 우하 초음파
-//#define echoPinRD 8
-//#define trigPinRD 9
 // 좌측 모터
 #define dir1 10
 #define pwm1 11
@@ -22,7 +16,6 @@
 
 // 변수
 String str = "";
-//int pwm_value;
 long duration;
 float distance;
 
@@ -33,7 +26,6 @@ void receiveFromMaster(int bytes) {
     c = Wire.read();
     str.concat(c);
   }
-  //Serial.print(str);
   active();
   str = "";
 }
@@ -96,18 +88,14 @@ void active(){
 }
 // 전진
 void go(){
-  //bool LD = echoLD();
-  //bool RD = echoRD();
   bool LU = echoLU();
   bool RU = echoRU();
-  //if ((LU == true) && (RU == true) && (LD == true) && (RD == true)){
   if((LU == true) && (RU == true)){
     Serial.println("직진");
     digitalWrite(dir1, LOW);
     digitalWrite(dir2, HIGH);
     analogWrite(pwm1, 255);
     analogWrite(pwm2, 255);
-    //delay(200); 
   }
   else {
     stopm();
@@ -115,20 +103,14 @@ void go(){
 }
 // 좌회전
 void left(){
-  //go();
-  //bool LD = echoLD();
-  //bool RD = echoRD();
   bool LU = echoLU();
   bool RU = echoRU();
-  //if ((LU == true) && (RU == true) && (LD == true) && (RD == true)){
   if((LU == true) && (RU == true)){
     Serial.println("좌회전");
     digitalWrite(dir1, LOW);
     digitalWrite(dir2, HIGH);
     analogWrite(pwm1, 0);
     analogWrite(pwm2, 255);
-    //delay(200);
-    //go();
   }
   else{
     stopm();
@@ -136,20 +118,14 @@ void left(){
 }
 // 우회전
 void right(){
-  //go();
-  //bool LD = echoLD();
-  //bool RD = echoRD();
   bool LU = echoLU();
   bool RU = echoRU();
-  //if ((LU == true) && (RU == true) && (LD == true) && (RD == true)){
   if((LU == true) && (RU == true)){
     Serial.println("우회전");
     digitalWrite(dir1, LOW);
     digitalWrite(dir2, HIGH);
     analogWrite(pwm1, 255);
     analogWrite(pwm2, 0);
-    //delay(200);
-    //go();
   }
   else{
     stopm();
@@ -187,18 +163,11 @@ void hright(){
 }
 // 정지
 void stopm(){
-  //bool LU = echoLU();
-  //bool RU = echoRU();
-  //bool LD = echoLD();
-  //bool RD = echoRD();
-  //if ((LU == false) || (RU == false) || (LD == false) || (RD == false)){
-    Serial.println("정지");
-    digitalWrite(dir1, LOW);
-    digitalWrite(dir2, HIGH);
-    analogWrite(pwm1, 0);
-    analogWrite(pwm2, 0);
-    //delay(200);
-  //}
+  Serial.println("정지");
+  digitalWrite(dir1, LOW);
+  digitalWrite(dir2, HIGH);
+  analogWrite(pwm1, 0);
+  analogWrite(pwm2, 0);
 }
 
 // 마스터로 텍스트 송신
